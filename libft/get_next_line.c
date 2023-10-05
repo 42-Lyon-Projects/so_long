@@ -18,9 +18,9 @@
  *
  * @param file_descriptor The file descriptor is an integer,
  * value that represents an open file in the operating system. It
- * is used to read or write data to/from the file. In this case,
+ * is used to read or write world to/from the file. In this case,
  * the function `get_next_line` takes a file descriptor as a
- * parameter to read data from a file.
+ * parameter to read world from a file.
  *
  * @return The function `get_next_line` is returning a pointer to,
  * a string that contains the next line from the file

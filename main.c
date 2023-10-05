@@ -6,53 +6,44 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 16:19:55 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/03 15:45:24 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/05 16:31:39 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include "stdio.h"
 #include "minilibx-linux/mlx.h"
+#include <fcntl.h>
 
 
-int main() {
-
-	t_data data = load_map("/home/jimmy/CLionProjects/so_long/maps/1.ber");
-	t_data *copy_map = clone(data);
-
-	int collectibles;
-	int exit;
-
-	collectibles = 0;
-	exit = 0;
-
-	printf("Is Rectangle: %b", is_rectangle(data));
-	t_location start_location = find_element(data, 'P');
-	printf("\nStart location %zu %zu", start_location.x, start_location.y);
-	t_location exit_location = find_element(data, 'E');
-	printf("\nExit location %zu %zu", exit_location.x, exit_location.y);
-	t_list *list = load_collectibles(data);
-	t_list *copy = list;
-	while (copy->next != NULL) {
-		t_collectible *col = ((t_collectible *) copy->content);
-		printf("\nCollectible: X %zu : Y %zu collected %b", col->location.x, col->location.y, col->collected);
-		copy = copy->next;
+int main(int argc, char *argv[]) {
+	(void) argc;
+	int fd;
+	if(argc < 2)
+	{
+		ft_putstr_fd( "Veuillez inclure le chemin vers une map dans votre commande.\n", 1);
+		return (-1);
 	}
-
-	printf("\nCollectibles Count: %d", count_collectibles(list, _false));
-	printf("\nIs closed: %b", is_closed(data));
-
-	is_solvable(*copy_map, start_location.x, start_location.y);
-	printf("\nSolvable ");
-	size_t index = 0;
-	while (index < data.lenght_y) {
-		printf("\nCopyMAP: %s", copy_map->map[index]);
-		index++;
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+	{
+		ft_putstr_fd("Veuillez inclure le chemin vers une map dans votre commande.\n", 1);
+		return (-1);
 	}
+	t_world world = load_map(fd, argv[1]);
 
-	collectibles = count_element(*copy_map, 'C');
-	exit = count_element(*copy_map, 'E');
-	printf("\nStruct error : %b", collectibles != 0 || exit != 0);
+	t_location start_location = find_element(world, 'P');
+	t_list *collectibles_list = load_collectibles(world);
+
+	t_player player = init_player(start_location, collectibles_list);
+	world.player = &player;
+
+	if(!is_valid_map(world))
+	{
+		ft_putstr_fd("Veuillez verifier votre map (rectangle, collectibles, sortie, ect..)", 1);
+		free_map(world);
+		return (-1);
+	}
 
 	void	*mlx;
 
@@ -61,24 +52,30 @@ int main() {
 		return (0);
 	}
 
-	void *window = mlx_new_window(mlx, 1500, 800, "Hello world!");
 
-	void *wall = load_texture("./textures/wall.xpm", mlx);
-	void *grass = load_texture("./textures/grass.xpm", mlx);
-	void *collectible = load_texture("./textures/collectible.xpm", mlx);
-	void *ext = load_texture("./textures/exit.xpm", mlx);
-	void *player = load_texture("./textures/player.xpm", mlx);
+	void *window = mlx_new_window(mlx, 2500, 2000, "Hello world!");
 
-	draw_type(mlx, window, wall, data, '1');
-	draw_type(mlx, window, grass, data, '0');
-	draw_type(mlx, window, collectible, data, 'C');
-	draw_type(mlx, window, ext, data, 'E');
-	draw_type(mlx, window, player, data, 'P');
+	void *wall_texture = load_texture("./textures/wall.xpm", mlx);
+	void *grass_texture = load_texture("./textures/grass.xpm", mlx);
+	void *exit_texture = load_texture("./textures/exit.xpm", mlx);
+	void *player_texture = load_texture("./textures/player.xpm", mlx);
+	void *collectible_texture = load_texture("./textures/collectible.xpm", mlx);
 
+	draw_type(mlx, window, wall_texture, world, '1');
+	draw_type(mlx, window, grass_texture, world, '0');
+	draw_type(mlx, window, exit_texture, world, 'E');
+	draw_type(mlx, window, player_texture, world, 'P');
+	draw_type(mlx, window, collectible_texture, world, 'C');
 
-	//mlx_hook(window, 2,  1L << 0, on_player_move, &data);
-
+	mlx_hook(window, 2, (1L<<0), &on_player_move, &world);
 	mlx_loop(mlx);
+	mlx_destroy_display(mlx);
+	mlx_clear_window(mlx, window);
+	mlx_destroy_window(mlx, window);
+	free(mlx);
+
+	free_map(world);
+
 
 	return 0;
 }

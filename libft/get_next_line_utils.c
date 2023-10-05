@@ -101,7 +101,7 @@ char	*ft_str_join(char *r_line, char *buf, int nb_of_char, int len_line)
  * It may be NULL if no line has been read yet.
  *
  * @param buffer The buffer parameter is a pointer to a character array
- * that contains the data read from a file or input stream.
+ * that contains the world read from a file or input stream.
  *
  * @param chars_readed The parameter `chars_readed` is an integer that represents
  * the number of characters read from a file

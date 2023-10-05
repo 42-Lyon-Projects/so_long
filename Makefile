@@ -25,7 +25,8 @@ SRCS =  main.c				\
 		player.c			\
 		rectangle_check.c	\
 		utils.c				\
-		graphics_utils.c
+		graphics_utils.c	\
+		location_utils.c
 
 LIBFT_FLAGS = -L./libft -l:libft.a
 OBJ_DIRECTORY = ./.obj/
@@ -33,7 +34,7 @@ OBJ_DIRECTORY = ./.obj/
 
 CC = cc
 
-FLAGS = -c -Wall -Wextra -Werror
+FLAGS = -c -Wall -Wextra -Werror -g
 
 INCLUDES = ./headers/so_long.h
 

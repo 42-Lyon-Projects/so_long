@@ -6,21 +6,21 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:21:10 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/03 10:54:19 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/05 15:06:29 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void free_map(t_data data) {
-	size_t lenght_y;
+void free_map(t_world world) {
+	int length_y;
 
-	lenght_y = 0;
-	while (data.lenght_y < lenght_y) {
-		free(data.map[lenght_y]);
-		lenght_y++;
+	length_y = 0;
+	while (world.length_y < length_y) {
+		free(world.map[length_y]);
+		length_y++;
 	}
-	free(data.map);
+	free(world.map);
 }
 
 void free_collectibles(t_list **collectibles) {
