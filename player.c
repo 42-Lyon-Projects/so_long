@@ -31,7 +31,6 @@ int	on_player_move(int keycode, t_world *world)
 	//d = 100
 	printf("\nPRINT: %d", keycode);
 
-
 	if(!can_move(keycode, world))
 		return -1;
 

@@ -6,12 +6,30 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 12:56:12 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/05 15:25:18 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/05 19:26:44 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include "minilibx-linux/mlx.h"
+
+t_texture *load_textures(void *mlx)
+{
+	t_texture *list;
+
+	list = malloc(sizeof (t_texture *) * 5);
+	if(!list)
+		return (NULL);
+
+	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/wall.xpm", mlx)));
+	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/grass.xpm", mlx)));
+	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/player.xpm", mlx)));
+	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/collectible.xpm", mlx)));
+	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/exit.xpm", mlx)));
+
+	return (list);
+}
+
 
 void *load_texture(char *path, void *mlx) {
 
@@ -48,3 +66,22 @@ void destroy_texture() {
 
 }
 
+
+void	ft_lstadd_texture(t_list **lst, t_list *new)
+{
+	new->next = *lst;
+	*lst = new;
+}
+
+t_texture_list 	*ft_newtexture(char	*name, void *content)
+{
+	t_texture_list	*list;
+
+	list = malloc(sizeof (t_list));
+	if (!list)
+		return (0);
+	list->name = name;
+	list->texture = content;
+	list->next = NULL;
+	return (list);
+}

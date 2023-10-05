@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:59:52 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/05 16:30:22 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/05 19:29:00 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,13 @@ typedef struct s_world
 	t_player	*player;
 }	t_world;
 
+typedef struct s_texture_list
+{
+	void				*name;
+	void				*texture;
+	struct s_texture_list	*next;
+}	t_texture_list;
+
 t_world load_map(int fd, char *path);
 t_boolean is_horizontal_rectangle(t_world world);
 t_boolean is_vertical_rectangle(t_world world);
@@ -75,6 +82,6 @@ t_location clone_location(t_location location);
 t_location create_location(int x, int y);
 
 t_collectible *get_collectible_at(t_world world, t_location location);
-
+void	ft_lstadd_texture(t_list **lst, t_list *new);
 
 #endif
