@@ -12,7 +12,7 @@
 
 #include "so_long.h"
 
-t_location find_element(t_world world, char type) {
+t_location find_element(t_world *world, char type) {
 	int pos_x;
 	int pos_y;
 	t_location location;
@@ -21,9 +21,9 @@ t_location find_element(t_world world, char type) {
 	pos_y = 0;
 	location.x = -1;
 	location.y = -1;
-	while (world.map[pos_y]) {
-		while (pos_x < (int) ft_strlen(world.map[0])) {
-			if (world.map[pos_y][pos_x] == type) {
+	while (world->map[pos_y]) {
+		while (pos_x < (int) ft_strlen(world->map[0])) {
+			if (world->map[pos_y][pos_x] == type) {
 				location.x = ++pos_x;
 				location.y = ++pos_y;
 				return (location);

@@ -6,106 +6,106 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 03:24:55 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/05 16:31:17 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/10 19:35:28 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-t_list *load_collectibles(t_world world) {
+t_collectible *load_collectibles(t_world *world) {
 	int pos_x;
 	int pos_y;
-	t_list **list;
-	t_collectible collectible;
+	t_collectible *collectible;
 
 	pos_x = 0;
 	pos_y = 0;
-	list = malloc(sizeof (t_list *));
-	if(!list)
+	collectible = malloc(sizeof (t_collectible));
+	if(!collectible)
 		return (NULL);
 
-	while (world.map[pos_y]) {
-		while (world.map[pos_y] && pos_x < (int) ft_strlen(world.map[0])) {
-			if (world.map[pos_y][pos_x] == 'C') {
+	while (world->map[pos_y]) {
+		while (world->map[pos_y] && pos_x < (int) ft_strlen(world->map[0])) {
+			if (world->map[pos_y][pos_x] == 'C') {
 				t_location location;
 				location.x = ++pos_x;
 				location.y = ++pos_y;
-				collectible = create_collectible(location);
-				ft_lstadd_front(list, ft_lstnew(&collectible));
+				if(!collectible->location)
+					collectible = create_collectible(location);
+				else
+				collectible->next = create_collectible(location);
 			}
 			pos_x++;
 		}
 		pos_x = 0;
 		pos_y++;
 	}
-	return (*list);
+	return (collectible);
 
 }
 
 
-t_collectible create_collectible(t_location location)
+t_collectible *create_collectible(t_location location)
 {
-	t_collectible collectible;
+	t_collectible *collectible;
 
-	collectible.location = location;
-	collectible.collected = 0;
+	collectible = malloc(sizeof (t_collectible));
+	if(!collectible)
+		return (NULL);
+
+	collectible->location = create_location(location.x, location.y);
+	collectible->collected = 0;
+	collectible->next = NULL;
 	return (collectible);
 }
 
-int count_collectibles(t_list *collectibles, t_boolean o_uncollected, t_boolean o_collected)
+int count_collectibles(t_collectible *collectibles, t_boolean o_uncollected, t_boolean o_collected)
 {
-	t_collectible *col;
+	t_collectible *copy;
 	int count;
 
 	count = 0;
-	col = NULL;
+	copy = collectibles;
 
-	if (!collectibles)
+	if (!copy)
 		return (0);
 
-	while (collectibles)
+	while (copy)
 	{
-		col = ((t_collectible*) collectibles->content);
-		if	(col == NULL)
-			continue;
-		if(o_uncollected && !col->collected)
+		if(o_uncollected && !copy->collected)
 			count++;
-		if(o_collected && col->collected)
+		if(o_collected && copy->collected)
 			count++;
-		collectibles = collectibles->next;
+		copy = copy->next;
 	}
 	return (count);
 }
 
 
-t_collectible *get_collectible_at(t_world world, t_location location)
+t_collectible *get_collectible_at(t_world *world, t_location *location)
 {
-	t_list *collectibles = world.player->collectibles;
-	t_collectible *collectible;
-
-	while (collectibles)
+	t_collectible *copy;
+	copy = world->player->collectibles;
+	while (copy)
 	{
-		collectible = ((t_collectible*) collectibles->content);
-		if(loc_equals(location, collectible->location))
-			return collectible;
-		collectibles = collectibles->next;
+		if(loc_equals(location, copy->location))
+			return copy;
+		copy =	copy->next;
 	}
 	return (NULL);
 }
 
-void update_collectible(t_list **collectibles, t_location location, t_boolean collected)
-{
-	t_list *collectibles_copy;
-	t_collectible *collectible;
 
-	collectibles_copy = *collectibles;
-	while (collectibles_copy->next)
+void update_collectible(t_collectible *collectibles, t_location location, t_boolean collected)
+{
+	t_collectible *copy;
+
+	copy = collectibles;
+	while (copy->next)
 	{
-		collectible = ((t_collectible*) collectibles_copy->content);
-		if(collectible->location.x == location.x && collectible->location.y == location.y) {
-			collectible->collected = collected;
+		if(copy->location->x == location.x && copy->location->y == location.y) {
+			copy->collected = collected;
 			break;
 		}
-		collectibles_copy = collectibles_copy->next;
+		copy = copy->next;
 	}
 }

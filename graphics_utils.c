@@ -6,43 +6,52 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 12:56:12 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/05 19:26:44 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/10 15:20:11 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 #include "minilibx-linux/mlx.h"
 
-t_texture *load_textures(void *mlx)
+t_textures *load_textures(void *mlx)
 {
-	t_texture *list;
+	t_textures *textures;
 
-	list = malloc(sizeof (t_texture *) * 5);
-	if(!list)
+	textures = malloc(sizeof (t_textures));
+	if(!textures)
 		return (NULL);
 
-	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/wall.xpm", mlx)));
-	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/grass.xpm", mlx)));
-	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/player.xpm", mlx)));
-	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/collectible.xpm", mlx)));
-	ft_lstadd_texture(&list, ft_lstnew(load_texture("./textures/exit.xpm", mlx)));
+	textures->wall = load_texture(mlx, '1', "./textures/wall.xpm");
+	textures->grass = load_texture(mlx, '0', "./textures/grass.xpm");
+	textures->player = load_texture(mlx, 'P', "./textures/player.xpm");
+	textures->collectible = load_texture(mlx, 'C', "./textures/collectible.xpm");
+	textures->exit = load_texture(mlx, 'E', "./textures/exit.xpm");
 
-	return (list);
+	if (textures->wall == NULL || textures->grass == NULL || textures->exit == NULL)
+		return (NULL);
+	if (textures->collectible == NULL || textures->player == NULL)
+		return (NULL);
+
+	return (textures);
 }
 
 
-void *load_texture(char *path, void *mlx) {
+t_texture *load_texture(void *mlx, char character, char *path)
+{
+	int			img_width;
+	int			img_height;
+	t_texture	*texture;
 
-	void *img;
-	char *relative_path = path;
-	int img_width;
-	int img_height;
+	texture = malloc(sizeof(t_texture));
+	if(!texture)
+		return (NULL);
 
-	img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
-	return (img);
+	texture->character = character;
+	texture->texture = mlx_xpm_file_to_image(mlx, path, &img_width, &img_height);
+	return (texture);
 }
 
-void draw_type(void *mlx, void *mlx_window, void *texture, t_world world, char c)
+void draw_type(void *mlx, void *mlx_window, t_world *world, t_texture texture)
 {
 	int index_y;
 	int index_x;
@@ -50,10 +59,10 @@ void draw_type(void *mlx, void *mlx_window, void *texture, t_world world, char c
 	index_y = 0;
 	index_x = 0;
 
-	while (world.map[index_y]) {
-		while (index_x < (int) ft_strlen(world.map[index_y])) {
-			if (world.map[index_y][index_x] == c) {
-				mlx_put_image_to_window(mlx, mlx_window, texture, index_x * 128, index_y * 128);
+	while (world->map[index_y]) {
+		while (index_x < (int) ft_strlen(world->map[index_y])) {
+			if (world->map[index_y][index_x] == texture.character) {
+				mlx_put_image_to_window(mlx, mlx_window, texture.texture, index_x * 128, index_y * 128);
 			}
 			index_x++;
 		}
@@ -62,26 +71,3 @@ void draw_type(void *mlx, void *mlx_window, void *texture, t_world world, char c
 	}
 }
 
-void destroy_texture() {
-
-}
-
-
-void	ft_lstadd_texture(t_list **lst, t_list *new)
-{
-	new->next = *lst;
-	*lst = new;
-}
-
-t_texture_list 	*ft_newtexture(char	*name, void *content)
-{
-	t_texture_list	*list;
-
-	list = malloc(sizeof (t_list));
-	if (!list)
-		return (0);
-	list->name = name;
-	list->texture = content;
-	list->next = NULL;
-	return (list);
-}
