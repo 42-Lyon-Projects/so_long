@@ -12,20 +12,10 @@
 
 #include "so_long.h"
 
-t_location *create_location(int x, int y)
+t_boolean loc_equals(t_location loc_1, t_location loc_2)
 {
-	t_location *location;
-
-	location = malloc(sizeof (t_location));
-	if(!location)
-		return (NULL);
-
-	location->x = x;
-	location->y = y;
-	return (location);
-}
-
-t_boolean loc_equals(t_location *loc_1, t_location *loc_2)
-{
-	return loc_1->x == loc_2->x && loc_1->y == loc_2->y;
+	 if(loc_1.x == loc_2.x && loc_1.y == loc_2.y)
+		 return (_true);
+	 else
+		 return (_false);
 }

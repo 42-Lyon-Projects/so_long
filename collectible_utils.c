@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 03:24:55 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/10 19:35:28 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/12 08:57:08 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,18 @@ t_collectible *load_collectibles(t_world *world) {
 
 	pos_x = 0;
 	pos_y = 0;
-	collectible = malloc(sizeof (t_collectible));
-	if(!collectible)
-		return (NULL);
+	collectible = NULL;
 
 	while (world->map[pos_y]) {
 		while (world->map[pos_y] && pos_x < (int) ft_strlen(world->map[0])) {
 			if (world->map[pos_y][pos_x] == 'C') {
 				t_location location;
-				location.x = ++pos_x;
-				location.y = ++pos_y;
-				if(!collectible->location)
+				location.x = pos_x;
+				location.y = pos_y;
+				if(!collectible)
 					collectible = create_collectible(location);
 				else
-				collectible->next = create_collectible(location);
+					collectible->next = create_collectible(location);
 			}
 			pos_x++;
 		}
@@ -52,60 +50,54 @@ t_collectible *create_collectible(t_location location)
 	if(!collectible)
 		return (NULL);
 
-	collectible->location = create_location(location.x, location.y);
+	collectible->location = location;
 	collectible->collected = 0;
+	collectible->is_set = _true;
 	collectible->next = NULL;
 	return (collectible);
 }
 
-int count_collectibles(t_collectible *collectibles, t_boolean o_uncollected, t_boolean o_collected)
+int count_collectibles(t_collectible collectibles, t_boolean o_uncollected, t_boolean o_collected)
 {
-	t_collectible *copy;
 	int count;
 
 	count = 0;
-	copy = collectibles;
 
-	if (!copy)
-		return (0);
-
-	while (copy)
+	while (collectibles.is_set)
 	{
-		if(o_uncollected && !copy->collected)
+		if(o_uncollected && !collectibles.collected)
 			count++;
-		if(o_collected && copy->collected)
+		if(o_collected && collectibles.collected)
 			count++;
-		copy = copy->next;
+		if(collectibles.next != NULL)
+			collectibles = *collectibles.next;
+		else
+			break;
 	}
 	return (count);
 }
 
 
-t_collectible *get_collectible_at(t_world *world, t_location *location)
+t_collectible *get_collectible_at(t_world world, t_location location)
 {
-	t_collectible *copy;
-	copy = world->player->collectibles;
-	while (copy)
+	while (world.player.collectibles)
 	{
-		if(loc_equals(location, copy->location))
-			return copy;
-		copy =	copy->next;
+		if(loc_equals(location, world.player.collectibles->location))
+			return (world.player.collectibles);
+		world.player.collectibles = world.player.collectibles->next;
 	}
 	return (NULL);
 }
 
-
+#include "stdio.h"
 void update_collectible(t_collectible *collectibles, t_location location, t_boolean collected)
 {
-	t_collectible *copy;
-
-	copy = collectibles;
-	while (copy->next)
+	while (collectibles)
 	{
-		if(copy->location->x == location.x && copy->location->y == location.y) {
-			copy->collected = collected;
+		if(loc_equals(collectibles->location, location)) {
+			collectibles->collected = collected;
 			break;
 		}
-		copy = copy->next;
+		collectibles = collectibles->next;
 	}
 }

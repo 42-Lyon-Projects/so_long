@@ -17,11 +17,17 @@ t_world *load_map(int fd, char *path, t_world *world)
 	int index;
 	int y;
 	char *s;
+	char	*tmp;
 
 	index = 0;
 	y = 0;
-	while (get_next_line(fd) != NULL)
+	tmp = get_next_line(fd);
+	while (tmp != NULL)
+	{
+		free(tmp);
+		tmp = get_next_line(fd);
 		index++;
+	}
 	world->map = malloc((index + 1) * sizeof(char *));
 	if (!world->map)
 		return (world);
@@ -30,15 +36,17 @@ t_world *load_map(int fd, char *path, t_world *world)
 	fd = open(path, O_RDONLY);
 	while (y <= index) {
 		s = get_next_line(fd);
-		if(s != NULL)
+		if(s != NULL) {
 			world->map[y] = ft_strtrim(s, "\n");
+			free(s);
+		}
 		y++;
 
 	}
 	return (world->length_y = index, world);
 }
 
-t_boolean is_valid_map(t_world *world)
+t_boolean is_valid_map(t_world world)
 {
 	t_location start_loc;
 	t_location exit_loc;
@@ -69,4 +77,13 @@ void is_solvable(t_world *world, int x, int y)
 	}
 	return ;
 
+}
+
+t_boolean is_inside_world(int y, int x, t_world world)
+{
+	if(y < 0  || y > world.length_y)
+		return (_false);
+	if(x < 0  || x > (int) ft_strlen(world.map[0]))
+		return (_false);
+	return (_true);
 }

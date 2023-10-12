@@ -34,7 +34,7 @@ OBJ_DIRECTORY = ./.obj/
 
 CC = cc
 
-FLAGS = -c -Wall -Wextra -Werror -g
+FLAGS = -c -Wall -Wextra -Werror -g -no-pie
 
 INCLUDES = ./headers/so_long.h
 

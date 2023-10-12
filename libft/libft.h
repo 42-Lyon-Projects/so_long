@@ -18,7 +18,7 @@
 # include "unistd.h"
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 50
 # endif
 
 int				ft_isalpha(int c);
