@@ -12,10 +12,10 @@
 
 #include "so_long.h"
 
-t_boolean loc_equals(t_location loc_1, t_location loc_2)
+t_boolean	loc_equals(t_location loc_1, t_location loc_2)
 {
-	 if(loc_1.x == loc_2.x && loc_1.y == loc_2.y)
-		 return (_true);
-	 else
-		 return (_false);
+	if (loc_1.x == loc_2.x && loc_1.y == loc_2.y)
+		return (_true);
+	else
+		return (_false);
 }

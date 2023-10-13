@@ -12,25 +12,25 @@
 
 #include "so_long.h"
 
-t_collectible *load_collectibles(t_world *world) {
-	int pos_x;
-	int pos_y;
-	t_collectible *collectible;
+t_collectible	*load_collectibles(t_world *world)
+{
+	int				pos_x;
+	int				pos_y;
+	t_collectible	*collectible;
+	t_location		location;
 
 	pos_x = 0;
 	pos_y = 0;
 	collectible = NULL;
-
-	while (world->map[pos_y]) {
-		while (world->map[pos_y] && pos_x < (int) ft_strlen(world->map[0])) {
-			if (world->map[pos_y][pos_x] == 'C') {
-				t_location location;
+	while (world->map[pos_y])
+	{
+		while (world->map[pos_y] && pos_x < (int) ft_strlen(world->map[0]))
+		{
+			if (world->map[pos_y][pos_x] == 'C')
+			{
 				location.x = pos_x;
 				location.y = pos_y;
-				if(!collectible)
-					collectible = create_collectible(location);
-				else
-					collectible->next = create_collectible(location);
+				last(&collectible, create_collectible(location));
 			}
 			pos_x++;
 		}
@@ -38,66 +38,56 @@ t_collectible *load_collectibles(t_world *world) {
 		pos_y++;
 	}
 	return (collectible);
-
 }
 
-
-t_collectible *create_collectible(t_location location)
+t_collectible	*create_collectible(t_location location)
 {
-	t_collectible *collectible;
+	t_collectible	*collectible;
 
 	collectible = malloc(sizeof (t_collectible));
-	if(!collectible)
+	if (!collectible)
 		return (NULL);
-
 	collectible->location = location;
 	collectible->collected = 0;
-	collectible->is_set = _true;
 	collectible->next = NULL;
 	return (collectible);
 }
 
-int count_collectibles(t_collectible collectibles, t_boolean o_uncollected, t_boolean o_collected)
-{
-	int count;
-
-	count = 0;
-
-	while (collectibles.is_set)
-	{
-		if(o_uncollected && !collectibles.collected)
-			count++;
-		if(o_collected && collectibles.collected)
-			count++;
-		if(collectibles.next != NULL)
-			collectibles = *collectibles.next;
-		else
-			break;
-	}
-	return (count);
-}
-
-
-t_collectible *get_collectible_at(t_world world, t_location location)
+t_collectible	*get_collectible_at(t_world world, t_location location)
 {
 	while (world.player.collectibles)
 	{
-		if(loc_equals(location, world.player.collectibles->location))
+		if (loc_equals(location, world.player.collectibles->location))
 			return (world.player.collectibles);
 		world.player.collectibles = world.player.collectibles->next;
 	}
 	return (NULL);
 }
 
-#include "stdio.h"
-void update_collectible(t_collectible *collectibles, t_location location, t_boolean collected)
+void	update_col(t_collectible *col, t_location loc, t_boolean bool)
 {
-	while (collectibles)
+	while (col)
 	{
-		if(loc_equals(collectibles->location, location)) {
-			collectibles->collected = collected;
-			break;
+		if (loc_equals(col->location, loc))
+		{
+			col->collected = bool;
+			break ;
 		}
-		collectibles = collectibles->next;
+		col = col->next;
 	}
+}
+
+void	last(t_collectible **lst, t_collectible *new)
+{
+	t_collectible	*tmp;
+
+	tmp = *lst;
+	if (tmp == NULL)
+	{
+		*lst = new;
+		return ;
+	}
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }

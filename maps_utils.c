@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 18:09:47 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/10 17:23:02 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/12 20:13:08 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "so_long.h"
@@ -46,37 +46,53 @@ t_world *load_map(int fd, char *path, t_world *world)
 	return (world->length_y = index, world);
 }
 
-t_boolean is_valid_map(t_world world)
+int valid_elements(t_world world)
 {
-	t_location start_loc;
-	t_location exit_loc;
-	//int collectibles;
+	int players;
+	int exits;
+	int collectibles;
 
-	start_loc = find_element(world, 'P');
-	exit_loc = find_element(world, 'E');
-	//collectibles = ft_lstsize(world.player->collectibles);
-	return (start_loc.x != -1 && exit_loc.x != -1);
+	players = count_element(world, 'P');
+	if(players > 1)
+		return (-1);
+	if(players < 1)
+		return (-2);
+	exits = count_element(world, 'E');
+	if(exits > 1)
+		return (-3);
+	if(exits < 1)
+		return (-4);
+	collectibles = count_element(world, 'C');
+	if(collectibles < 1)
+		return (-5);
+	return (1);
 }
 
-void is_solvable(t_world *world, int x, int y)
+void is_solvable(char **map, int x, int y, int length_y)
 {
 
 	char character;
-	if(world->map[y] == NULL || y > world->length_y)
+	if(map[y] == NULL || y > length_y)
 		return;
-	character = world->map[y][x];
+	character = map[y][x];
 	if (character == 'O')
 		return ;
-	if (character == '0' || character == 'C' || character == 'P' || character == 'E')
+	if (character == '0' || character == 'C' || character == 'P')
 	{
-		world->map[y][x] = 'O';
-		is_solvable(world, x - 1, y);
-		is_solvable(world, x + 1, y);
-		is_solvable(world, x, y + 1);
-		is_solvable(world,x, y - 1);
+		map[y][x] = 'O';
+		is_solvable(map, x - 1, y, length_y);
+		is_solvable(map, x + 1, y, length_y);
+		is_solvable(map, x, y + 1, length_y);
+		is_solvable(map,x, y - 1, length_y);
 	}
-	return ;
-
+	if(character == 'E')
+	{
+		map[y][x] = 'L';
+		is_solvable(map, x - 1, y, length_y);
+		is_solvable(map, x + 1, y, length_y);
+		is_solvable(map, x, y + 1, length_y);
+		is_solvable(map,x, y - 1, length_y);
+	}
 }
 
 t_boolean is_inside_world(int y, int x, t_world world)
