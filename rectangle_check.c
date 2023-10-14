@@ -45,6 +45,8 @@ t_boolean	has_good_shape(t_world world)
 	int	x_length;
 	int	y_index;
 
+	if (world.map == NULL || world.map[0] == NULL)
+		return (_false);
 	x_length = (int) ft_strlen(world.map[0]);
 	y_index = 0;
 	while (y_index < world.length_y && world.map[y_index])

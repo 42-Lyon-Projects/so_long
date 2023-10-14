@@ -12,6 +12,23 @@
 
 #include "so_long.h"
 
+int	init_graphics_part(t_game *game)
+{
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		return (-1);
+	game->textures = load_textures(game->mlx);
+	if (free_unavailable_texture(*game))
+		return (-1);
+	game->window = mlx_new_window(game->mlx, \
+	128 * ft_strlen(game->world.map[0]), \
+	128 * game->world.length_y, "Xe'Burger");
+	draws(*game);
+	mlx_hook(game->window, 2, (1L << 0), on_player_move, game);
+	mlx_loop(game->mlx);
+	return (0);
+}
+
 void	draw_type(t_game game, t_texture texture)
 {
 	int	index_y;

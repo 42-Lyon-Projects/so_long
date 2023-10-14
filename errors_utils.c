@@ -48,27 +48,32 @@ t_boolean	handle_map_solve(char *path, t_game game)
 	return (0);
 }
 
-int	handle_map_error(char *path, t_game game)
+int	handle_elements_error(char *path, t_game game)
 {
 	int				elements_code;
 
+	elements_code = valid_elements(game.world);
+	if (elements_code < 0)
+	{
+		ft_printf("Error\n -> Map must contains 1 E, 1 P, minimum 1 C");
+		free_collectibles(game.world.player.collectibles);
+		free_map(&game.world);
+		return (-1);
+	}
+	return (handle_map_solve(path, game));
+}
+
+int	handle_map_error(t_game game)
+{
 	if (has_illegal_character(game.world))
 	{
 		free_map(&game.world);
-		free_collectibles(game.world.player.collectibles);
 		return (ft_printf("Error\n -> Invalid Map / illegal character"), -1);
 	}
 	if (!is_valid_shape(game.world))
 	{
 		free_map(&game.world);
-		free_collectibles(game.world.player.collectibles);
 		return (ft_printf("Error\n -> Invalid shape / not closed"), -1);
 	}
-	elements_code = valid_elements(game.world);
-	if (elements_code < 0)
-	{
-		ft_printf("Error\n -> Map must contains 1 E, 1 P, minimum 1 C");
-		return (-1);
-	}
-	return (handle_map_solve(path, game));
+	return (0);
 }

@@ -86,22 +86,22 @@ void	is_solvable(char **map, int x, int y, int length_y)
 	character = map[y][x];
 	if (character == 'O')
 		return ;
-	if (character == '0' || character == 'C' || character == 'P')
+	if (character == '0' || character == 'C' || \
+	character == 'P' || character == 'E')
 	{
-		map[y][x] = 'O';
+		if (character == 'E')
+		{
+			map[y][x] = 'L';
+			return ;
+		}
+		else
+			map[y][x] = 'O';
 		is_solvable(map, x - 1, y, length_y);
 		is_solvable(map, x + 1, y, length_y);
 		is_solvable(map, x, y + 1, length_y);
 		is_solvable(map, x, y - 1, length_y);
 	}
-	if (character == 'E')
-	{
-		map[y][x] = 'L';
-		is_solvable(map, x - 1, y, length_y);
-		is_solvable(map, x + 1, y, length_y);
-		is_solvable(map, x, y + 1, length_y);
-		is_solvable(map, x, y - 1, length_y);
-	}
+	return ;
 }
 
 t_boolean	is_inside_world(int y, int x, t_world world)
