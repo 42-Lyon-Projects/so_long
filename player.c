@@ -41,6 +41,8 @@ int	on_player_move(int keycode, t_game *game)
 {
 	t_collectible	*collectible;
 
+	if (keycode == 65307)
+		mlx_loop_end(game->mlx);
 	if (!can_move(keycode, *game))
 		return (-1);
 	if (keycode != 119 && keycode != 115 && keycode != 97 && keycode != 100)
@@ -60,7 +62,7 @@ int	on_player_move(int keycode, t_game *game)
 	collectible = get_collectible_at(game->world, game->world.player.location);
 	if (collectible != NULL && !collectible->collected)
 		update_col(collectible, game->world.player.location, _true);
-	ft_putstr_fd("INFOS: \nMovements ", 1);
+	ft_printf("-> INFOS: \n| Movements: %d\n", game->world.player.movements);
 	return (0);
 }
 

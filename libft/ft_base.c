@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_base.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 15:22:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/14 15:22:26 by jbadaire         ###   ########.fr       */
+/*   Created: 2023/10/14 15:22:00 by jbadaire          #+#    #+#             */
+/*   Updated: 2023/10/14 15:22:00 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_base(unsigned long number, int base_number, char base_array[], int value)
 {
-	int	index;
+	char	character;
 
-	if (!s)
-		return (0);
-	index = 0;
-	while (s[index] && s[index] != '\0')
+	value = 0;
+	if (number >= (unsigned long)base_number)
 	{
-		ft_putchar_fd(s[index], fd);
-		index++;
+		value += ft_base(number / base_number, base_number, base_array, value);
+		value += ft_base(number % base_number, base_number, base_array, value);
 	}
-	return (index);
+	else
+	{
+		character = base_array[number];
+		value += ft_putchar_fd(character, 1);
+		return (value);
+	}
+	return (value);
 }

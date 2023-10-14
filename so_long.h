@@ -75,8 +75,8 @@ t_boolean		is_inside_world(int y, int x, t_world world);
 int				handle_launch_error(char *argv[], t_world *world);
 
 // ** ERRORS **//
-int	handle_file_error(char *argv[]);
-int	handle_map_error(char *path, t_game game);
+int				handle_file_error(char *argv[]);
+int				handle_map_error(char *path, t_game game);
 
 // ** MAP ** //
 t_world			*load_map(int fd, char *path, t_world *world);

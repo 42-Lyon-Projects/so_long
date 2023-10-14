@@ -26,15 +26,16 @@ int	main(int argc, char *argv[])
 	game.world.player = init_player(find_element(game.world, 'P'), \
 	load_collectibles(&game.world));
 	value = handle_map_error(argv[1], game);
-	if(value < 0)
-		return(0);
+	if (value < 0)
+		return (0);
 	game.mlx = mlx_init();
 	if (!game.mlx)
 		return (0);
 	game.textures = load_textures(game.mlx);
 	if (free_unavailable_texture(game))
 		return (0);
-	game.window = mlx_new_window(game.mlx, 128 * ft_strlen(game.world.map[0]), 128 * game.world.length_y, "Xe'Burger");
+	game.window = mlx_new_window(game.mlx, 128 * ft_strlen(game.world.map[0]), \
+	128 * game.world.length_y, "Xe'Burger");
 	draws(game);
 	mlx_hook(game.window, 2, (1L << 0), on_player_move, &game);
 	mlx_loop(game.mlx);

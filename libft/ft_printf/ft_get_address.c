@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   get_address.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 15:22:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/14 15:22:26 by jbadaire         ###   ########.fr       */
+/*   Created: 2023/09/07 18:21:53 by jbadaire          #+#    #+#             */
+/*   Updated: 2023/09/18 08:54:49 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_get_address(va_list param, char *base_array)
 {
-	int	index;
+	size_t		number;
+	int			value;
 
-	if (!s)
-		return (0);
-	index = 0;
-	while (s[index] && s[index] != '\0')
-	{
-		ft_putchar_fd(s[index], fd);
-		index++;
-	}
-	return (index);
+	number = va_arg(param, size_t);
+	value = 0;
+	if (number == 0)
+		return (ft_putstr_fd("(nil)", 1));
+	value += ft_putstr_fd("0x", 1);
+	value += ft_base(number, 16, base_array, 0);
+	return (value);
 }

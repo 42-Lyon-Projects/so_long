@@ -58,7 +58,7 @@ int	free_unavailable_texture(t_game game)
 {
 	if (has_unavailable_texture(game.textures))
 	{
-		ft_putstr_fd("Error\n -> Textures can't be loaded.", 1);
+		ft_printf("Error\n -> Textures can't be loaded.");
 		free_map(&game.world);
 		free_textures(&game);
 		free_collectibles(game.world.player.collectibles);

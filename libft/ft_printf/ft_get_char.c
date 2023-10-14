@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   get_char.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 15:22:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/14 15:22:26 by jbadaire         ###   ########.fr       */
+/*   Created: 2023/09/06 18:47:16 by jbadaire          #+#    #+#             */
+/*   Updated: 2023/09/12 13:56:35 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_get_char(va_list param)
 {
-	int	index;
+	char	c;
 
-	if (!s)
-		return (0);
-	index = 0;
-	while (s[index] && s[index] != '\0')
-	{
-		ft_putchar_fd(s[index], fd);
-		index++;
-	}
-	return (index);
+	c = va_arg(param, int);
+	return (ft_putchar_fd(c, 1));
 }

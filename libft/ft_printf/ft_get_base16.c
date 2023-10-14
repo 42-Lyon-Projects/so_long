@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   get_base16.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 15:22:26 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/14 15:22:26 by jbadaire         ###   ########.fr       */
+/*   Created: 2023/09/07 18:10:35 by jbadaire          #+#    #+#             */
+/*   Updated: 2023/09/12 14:58:19 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_get_base16(va_list param, char *base)
 {
-	int	index;
+	unsigned int	number;
 
-	if (!s)
-		return (0);
-	index = 0;
-	while (s[index] && s[index] != '\0')
-	{
-		ft_putchar_fd(s[index], fd);
-		index++;
-	}
-	return (index);
+	number = va_arg(param, unsigned int);
+	return (ft_base(number, 16, base, 0));
 }
