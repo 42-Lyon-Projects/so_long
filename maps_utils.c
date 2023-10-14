@@ -12,15 +12,12 @@
 #include "so_long.h"
 #include <fcntl.h>
 
-t_world	*load_map(int fd, char *path, t_world *world)
+int	map_size(int fd)
 {
-	int		index;
-	int		y;
-	char	*s;
 	char	*tmp;
+	int		index;
 
 	index = 0;
-	y = 0;
 	tmp = get_next_line(fd);
 	while (tmp != NULL)
 	{
@@ -28,13 +25,24 @@ t_world	*load_map(int fd, char *path, t_world *world)
 		tmp = get_next_line(fd);
 		index++;
 	}
-	world->map = malloc((index + 1) * sizeof(char *));
+	close(fd);
+	return (index);
+}
+
+t_world	*load_map(int fd, char *path, t_world *world)
+{
+	int		y;
+	int		y_index;
+	char	*s;
+
+	y = 0;
+	y_index = map_size(fd);
+	world->map = malloc((y_index + 1) * sizeof(char *));
 	if (!world->map)
 		return (world);
-	world->map[index] = NULL;
-	close(fd);
+	world->map[y_index] = NULL;
 	fd = open(path, O_RDONLY);
-	while (y <= index)
+	while (y <= y_index)
 	{
 		s = get_next_line(fd);
 		if (s != NULL)
@@ -44,7 +52,7 @@ t_world	*load_map(int fd, char *path, t_world *world)
 		}
 		y++;
 	}
-	return (world->length_y = index, world);
+	return (world->length_y = y_index, world);
 }
 
 int	valid_elements(t_world world)

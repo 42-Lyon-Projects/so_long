@@ -18,9 +18,8 @@ int	main(int argc, char *argv[])
 	t_game			game;
 	int				value;
 
-	(void) argc;
 	fd = handle_file_error(argv);
-	if (fd < 0)
+	if (argc < 1 || fd < 0)
 		return (0);
 	load_map(fd, argv[1], &game.world);
 	game.world.player = init_player(find_element(game.world, 'P'), \

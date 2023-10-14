@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:59:52 by jbadaire          #+#    #+#             */
-/*   Updated: 2023/10/12 20:15:13 by jbadaire         ###   ########.fr       */
+/*   Updated: 2023/10/14 16:22:10 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include "libft/libft.h"
 # include "minilibx-linux/mlx.h"
-
-# include <stdlib.h>
 
 typedef struct s_location {
 	int						x;
@@ -72,7 +70,7 @@ typedef struct s_game
 // ** UTILS ** //
 t_boolean		loc_equals(t_location loc_1, t_location loc_2);
 t_boolean		is_inside_world(int y, int x, t_world world);
-int				handle_launch_error(char *argv[], t_world *world);
+t_boolean		ft_endwith(char *src, char *pattern);
 
 // ** ERRORS **//
 int				handle_file_error(char *argv[]);
@@ -85,6 +83,8 @@ t_boolean		has_good_shape(t_world world);
 t_boolean		is_closed(t_world world);
 t_boolean		has_illegal_character(t_world world);
 t_location		find_element(t_world world, char type);
+t_boolean		handle_map_solve(char *path, t_game game);
+int				map_size(int fd);
 int				count_element(t_world world, char type);
 int				valid_elements(t_world world);
 void			is_solvable(char **map, int x, int y, int length_y);
