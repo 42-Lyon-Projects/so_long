@@ -25,7 +25,7 @@ int	handle_file_error(char *argv[])
 	if (fd == -1)
 	{
 		ft_printf("Error\n -> Can't open file.\n");
-		ft_printf("please check permissions or path: %s", argv[1]);
+		ft_printf("please check permissions or path: %s\n", argv[1]);
 		return (-2);
 	}
 	return (fd);
@@ -40,7 +40,7 @@ t_boolean	handle_map_solve(char *path, t_game game)
 	game.world.player.location.y, game.world.length_y);
 	if (count_element(cloned, 'C') > 0 || count_element(cloned, 'E') > 0)
 	{
-		ft_printf("Error\n -> Sorry, your map is not resolvable");
+		ft_printf("Error\n -> Sorry, your map is not resolvable\n");
 		free_collectibles(game.world.player.collectibles);
 		return (free_map(&game.world), free_map(&cloned), -2);
 	}
@@ -55,7 +55,7 @@ int	handle_elements_error(char *path, t_game game)
 	elements_code = valid_elements(game.world);
 	if (elements_code < 0)
 	{
-		ft_printf("Error\n -> Map must contains 1 E, 1 P, minimum 1 C");
+		ft_printf("Error\n -> Map must contains 1 E, 1 P, minimum 1 C\n");
 		free_collectibles(game.world.player.collectibles);
 		free_map(&game.world);
 		return (-1);
@@ -68,12 +68,12 @@ int	handle_map_error(t_game game)
 	if (has_illegal_character(game.world))
 	{
 		free_map(&game.world);
-		return (ft_printf("Error\n -> Invalid Map / illegal character"), -1);
+		return (ft_printf("Error\n -> Invalid Map / illegal character\n"), -1);
 	}
 	if (!is_valid_shape(game.world))
 	{
 		free_map(&game.world);
-		return (ft_printf("Error\n -> Invalid shape / not closed"), -1);
+		return (ft_printf("Error\n -> Invalid shape / not closed\n"), -1);
 	}
 	return (0);
 }

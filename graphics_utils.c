@@ -12,6 +12,12 @@
 
 #include "so_long.h"
 
+int	mlx_loop_cancel(t_game *game)
+{
+	mlx_loop_end(game->mlx);
+	return (1);
+}
+
 int	init_graphics_part(t_game *game)
 {
 	game->mlx = mlx_init();
@@ -25,6 +31,7 @@ int	init_graphics_part(t_game *game)
 	128 * game->world.length_y, "Xe'Burger");
 	draws(*game);
 	mlx_hook(game->window, 2, (1L << 0), on_player_move, game);
+	mlx_hook(game->window, 17, 0L, mlx_loop_cancel, game);
 	mlx_loop(game->mlx);
 	return (0);
 }

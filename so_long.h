@@ -72,6 +72,8 @@ t_boolean		loc_equals(t_location loc_1, t_location loc_2);
 t_boolean		is_inside_world(int y, int x, t_world world);
 t_boolean		ft_endwith(char *src, char *pattern);
 int				init_graphics_part(t_game *game);
+int				mlx_loop_cancel(t_game *game);
+
 // ** ERRORS **//
 int				handle_file_error(char *argv[]);
 int				handle_map_error(t_game game);
